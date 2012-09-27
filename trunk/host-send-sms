@@ -1,0 +1,37 @@
+#!/bin/bash
+## Author: Anderson Francolle Carneiro
+## Email: splintersap@gmail.com
+## Version: 0.3
+
+##Name: host-send-sms
+
+## Script para envio de sms via torpedus.com.br .Necessario cadastro no site e creditos em conta para poder utilizar o sistema.
+##
+## Script for sending sms via torpedus.com.br. Needed register on the site and credits into account in order to use the system.
+
+
+## Usuario e senha do torpedus sms.
+## User and password of torpedus sms.
+USER="usuario";
+PASSWORD="senha";
+
+## Codigo do pais;
+COUNTRYCODE="55";
+
+###############################################################################################################################
+
+HOSTNAME=$1;                ## Nome do host.
+HOSTSTATE=$2;               ## Estado do host (DOWN,UP,etc).
+SHORTDATETIME=$3;           ## Data.
+
+TO=$4;                      ## Numero do celular que ira receber a notificao (Pager).
+                            ## The phone number that will receive notification.
+###############################################################################################################################
+## Envio randomico para que nao sobrecarregue o sistema de envio. (para mais de 2 celulares)
+RANDOM=$(date +%s);
+sleep 1;
+INTERVAL=$(($RANDOM % 5 + 1));
+sleep $INTERVAL;
+## Utilizacao do lynx para envio do sms
+## Utilization of lynx for sending sms
+lynx -dump "http://torpedus.com.br/sms/index.php?app=webservices&u=$USER&p=$PASSWORD&ta=pv&to=$COUNTRYCODE$TO&msg=ALERTA%20%20Host:$HOSTNAME%20%20status:%20$HOSTSTATE%20%20%20as%20%20$SHORTDATETIME"   -accept_all_cookies &
